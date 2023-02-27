@@ -3,7 +3,7 @@ const chats = require("./data/data.js")
 const dotenv = require("dotenv")
 
 const app = express()
-dotenv.config()
+dotenv.config() // helps to read the env file
 
 
 app.get("/",function(req,res){
