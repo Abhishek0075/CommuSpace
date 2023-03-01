@@ -1,5 +1,6 @@
-// userId
+// senderId
 // communityId
+//messages
 
 const mongoose = require("mongoose")
 const MessagingModel = mongoose.Schema(
@@ -8,7 +9,7 @@ const MessagingModel = mongoose.Schema(
             type : mongoose.Schema.Types.ObjectId,
             ref : "Users"
         },
-        creator : {
+        communityId : {
             type : mongoose.Schema.Types.ObjectId,
             ref : "Community"
         },
