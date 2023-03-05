@@ -10,7 +10,7 @@ const connectDB = async function(){
         console.log('MonogDB Connection : ',conn.connection.host);
     } catch (err) {
         console.log("Error : ",err.message);
-        process.exit
+        process.exit()
     }
 }
 
