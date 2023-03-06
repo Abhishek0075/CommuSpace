@@ -3,10 +3,10 @@ const Users = require("../models/usersModel");
 const generateToken = require("../config/generateToken");
 
 const registerUser = asyncHandler(async function(req,res) {
-    const {name,proPic,phone,email,DOB,password} = req.body // initializing the req.body values
+    const {userName,proPic,phone,email,DOB,password} = req.body // initializing the req.body values
                                                             // to the array of variables
 
-    if(!name || !phone || !email || !DOB || !password){
+    if(!userName || !phone || !email || !DOB || !password){
         res.status(400)
         throw new Error("Please enter all the Feilds")
     }
@@ -16,14 +16,18 @@ const registerUser = asyncHandler(async function(req,res) {
         res.status(400)
         throw new Error("User already exists")
     }
-    
     const user = await Users.create({
-        name, proPic, phone, email, DOB, password
+        userName,
+        proPic,
+        phone,
+        email,
+        DOB,
+        password,
     })
     if(user){
         res.status(201).json({
             _id : user._id,
-            userName : user.name,
+            userName : user.userName,
             profilePic : user.proPic,
             phone : user.phone,
             email : user.email,

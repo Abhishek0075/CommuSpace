@@ -2,8 +2,7 @@ const express = require("express")
 const chats = require("./data/data.js")
 const dotenv = require("dotenv")
 const connectDB = require("./config/DBConnection.js")
-const router = require("./routes/userRoutes.js")
-
+const userRoutes = require("./routes/userRoutes.js")
 
 const app = express()
 app.use(express.json()) // accept JSON file
@@ -25,7 +24,7 @@ app.get("/chats/:id",function(req,res){
     res.send(singleChat)                                        // satisfying the given condition
 })
 
-app.use("/user",userRo)
+app.use("/api/user",userRoutes)
 
 const PORT = process.env.PORT || 3000
 
