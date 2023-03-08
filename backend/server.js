@@ -24,7 +24,7 @@ app.get("/chats/:id",function(req,res){
     res.send(singleChat)                                        // satisfying the given condition
 })
 
-app.use("/api/user",userRoutes)
+app.use("/user",userRoutes)
 
 const PORT = process.env.PORT || 3000
 
