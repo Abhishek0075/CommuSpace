@@ -6,6 +6,7 @@
 // Password
 
 const mongoose = require("mongoose")
+const bcrypt = require("bcryptjs")
 const userModel = mongoose.Schema(
     {
         userName : { 
@@ -41,6 +42,19 @@ const userModel = mongoose.Schema(
     }
 
 );
+
+userModel.methods.matchPassword = async function(enteredPassword){
+    const comparison = await bcrypt.compare(enteredPassword,this.password)
+    return comparison;
+}
+
+userModel.pre('save',async function(next){
+    if(!this.isModified){
+        next()
+    }
+    const salt = await bcrypt.genSalt(10)
+    this.password = await bcrypt.hash(this.password,salt) 
+})
 
 const Users = mongoose.model("Users", userModel)
 
