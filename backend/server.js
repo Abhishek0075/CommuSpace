@@ -3,6 +3,7 @@ const chats = require("./data/data.js")
 const dotenv = require("dotenv")
 const connectDB = require("./config/DBConnection.js")
 const userRoutes = require("./routes/userRoutes.js")
+const { notFound, errorHandler } = require("./middleware/errorMiddleware.js")
 
 const app = express()
 app.use(express.json()) // accept JSON file
@@ -25,6 +26,8 @@ app.get("/chats/:id",function(req,res){
 })
 
 app.use("/user",userRoutes)
+app.use(notFound)
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3000
 
