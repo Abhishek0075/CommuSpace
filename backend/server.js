@@ -22,7 +22,7 @@ app.get("/chats",function(req,res){
 app.get("/chats/:id",function(req,res){
     // console.log(req.params.id);
     const singleChat = chats.find((c)=>c._id === req.params.id) // find gives the elements of a list
-    res.send(singleChat)                                        // satisfying the given condition
+    res.send(singleChat)                               // satisfying the given condition
 })
 
 app.use("/user",userRoutes)
