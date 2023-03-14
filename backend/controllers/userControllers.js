@@ -47,8 +47,8 @@ const registerUser = asyncHandler(async function(req,res) {
 
 const authUser = asyncHandler(async function(req,res){
     const {email, password} = req.body
-
-    const user = await Users.findOne({$or: [{email: email}, {phone: email}]})
+    const user = await Users.findOne({$or: [{email: email}, {phone: email}]}) //email variable is given at phone
+                                                                // coz we allow the phone number login
 
     if(user && await user.matchPassword(password)){
         res.json({
@@ -68,10 +68,10 @@ const authUser = asyncHandler(async function(req,res){
 
 // /user?search = abhishek
 const allUsers = asyncHandler(async function(req,res){
+    console.log(req);
     const keyword = req.query.search ?{
         $or : [
-            { name : {$regex : req.query.search, $options : "i"}},
-            { email : {$regex : req.query.search, $options : "i"}}
+            { userName : {$regex : req.query.search, $options : "i"}}
         ],
     }
     :{}
@@ -82,13 +82,12 @@ const allUsers = asyncHandler(async function(req,res){
     // if (req.query.search) {
     // keyword = {
     //     $or: [
-    //     { name: { $regex: req.query.search, $options: "i" } },
-    //     { email: { $regex: req.query.search, $options: "i" } }
+    //     { userName: { $regex: req.query.search, $options: "i" } }
     //     ]
     // };
     // }
 
-    const users = await Users.find(keyword)
+    const users = await Users.find(keyword).find({$ne : req.user._id})
     // The above is a chained find in which first find gives data filtered
     // by keyword next filter from the first filtered data
     res.send(users)
