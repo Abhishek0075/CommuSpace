@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/CommuSpace/static/css/main.24be2ac7.css",
+    "main.js": "/CommuSpace/static/js/main.a67277ba.js",
+    "static/js/787.fade2e9e.chunk.js": "/CommuSpace/static/js/787.fade2e9e.chunk.js",
+    "static/media/1.gif": "/CommuSpace/static/media/1.8efd92f1273c58793a8e.gif",
+    "static/media/39.jpg": "/CommuSpace/static/media/39.76a5e7896ba3fd79cd4b.jpg",
+    "static/media/bg.png": "/CommuSpace/static/media/bg.20daf6267a2d8a1e3f7d.png",
+    "static/media/0.jpg": "/CommuSpace/static/media/0.c3d6813d62761c14645b.jpg",
+    "static/media/3.gif": "/CommuSpace/static/media/3.0f9f720a0272be38e0df.gif",
+    "static/media/24.png": "/CommuSpace/static/media/24.dffc7cc560981fdc7da6.png",
+    "static/media/33.jpg": "/CommuSpace/static/media/33.f2e6bedcf0f865738997.jpg",
+    "static/media/2.png": "/CommuSpace/static/media/2.40d0e943484de74f34ff.png",
+    "static/media/9.jpg": "/CommuSpace/static/media/9.e95dc528d030625f45f1.jpg",
+    "static/media/20.png": "/CommuSpace/static/media/20.85afb122e7463097618a.png",
+    "static/media/25.png": "/CommuSpace/static/media/25.ffbc5aa7e446028772cb.png",
+    "index.html": "/CommuSpace/index.html",
+    "main.24be2ac7.css.map": "/CommuSpace/static/css/main.24be2ac7.css.map",
+    "main.a67277ba.js.map": "/CommuSpace/static/js/main.a67277ba.js.map",
+    "787.fade2e9e.chunk.js.map": "/CommuSpace/static/js/787.fade2e9e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.24be2ac7.css",
+    "static/js/main.a67277ba.js"
+  ]
+}
