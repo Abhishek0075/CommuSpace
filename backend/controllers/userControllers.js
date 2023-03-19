@@ -18,12 +18,12 @@ const registerUser = asyncHandler(async function(req,res) {
         throw new Error("User already exists")
     }
     const user = await Users.create({
-        userName,
-        proPic,
-        phone,
-        email,
-        DOB,
-        password,
+        userName : userName,
+        profilePic : proPic,
+        phone : phone,
+        email : email,
+        DOB : DOB,
+        password : password,
         
     })
     if(user){
@@ -86,7 +86,6 @@ const allUsers = asyncHandler(async function(req,res){
     //     ]
     // };
     // }
-
     const users = await Users.find(keyword).find({$ne : req.user._id})
     // The above is a chained find in which first find gives data filtered
     // by keyword next filter from the first filtered data

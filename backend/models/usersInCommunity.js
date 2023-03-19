@@ -1,14 +1,14 @@
-// userId
+// userId is a multivalued
 // communityId
 
 const mongoose = require("mongoose")
 const userCommunityModel = mongoose.Schema(
     {
-        userId : {
+        participants : {
             type : mongoose.Schema.Types.ObjectId,
             ref : "Users"
         },
-        creator : {
+        communityId : {
             type : mongoose.Schema.Types.ObjectId,
             ref : "Community"
         },
@@ -21,3 +21,10 @@ const userCommunityModel = mongoose.Schema(
 const UserCommunity = mongoose.model("UserCommunity", userCommunityModel)
 
 module.exports = UserCommunity;
+
+////////////////////////////////////////////////////////
+
+// Check the api in postman input check using utube its bit different
+// Date : 15 mar
+
+////////////////////////////////////////////////////////
