@@ -1,5 +1,4 @@
 const asyncHandler = require("express-async-handler")
-const UserCommunity = require("../models/usersInCommunity")
 const Community = require("../models/communityModel")
 const Users = require("../models/usersModel")
 
