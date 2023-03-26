@@ -17,6 +17,7 @@ const registerUser = asyncHandler(async function(req,res) {
         res.status(400)
         throw new Error("User already exists")
     }
+    
     const user = await Users.create({
         userName : userName,
         profilePic : proPic,

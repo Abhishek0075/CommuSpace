@@ -13,7 +13,7 @@ const createCommunityChat = asyncHandler(async function(req,res){
     }
     let participantUsers
     try{
-        participantUsers = await Users.find({_id: {$in: req.body.users}})
+        participantUsers = await Users.find({_id: {$in: req.body.users}},{password : 0})
     }catch(e){
         console.error(e);
     }
@@ -24,7 +24,8 @@ const createCommunityChat = asyncHandler(async function(req,res){
             communityName : req.body.communityName,
             creator :  req.user._id,
             idea : req.body.idea,
-            existsFor : req.body.existsFor
+            existsFor : req.body.existsFor,
+            participants : participantUsers
         })
         if(addCommunity){
             res.status(201).json({
@@ -32,27 +33,8 @@ const createCommunityChat = asyncHandler(async function(req,res){
                 communityName : addCommunity.communityName,
                 creator :  addCommunity.creator,
                 idea : addCommunity.idea,
-                existsFor : addCommunity.existsFor
-            })
-        }else{
-            res.status(400)
-            err = new Error("Failed to Create New User")
-            throw err
-        }
-        
-        let addUsersToCommunity
-        for (let index = 1; index <= participantUsers.length; index++) {
-                addUsersToCommunity = await UserCommunity.create({
-                participants : req.body.participantUsers,
-                communityId : addCommunity._id
-            })
-        }
-        
-        if(addUsersToCommunity){
-            res.status(201).json({
-                _id : addUsersToCommunity._id,
-                participants : addUsersToCommunity.participants,
-                communityId : addUsersToCommunity.communityId
+                existsFor : addCommunity.existsFor,
+                participants : addCommunity.participants
             })
         }else{
             res.status(400)
