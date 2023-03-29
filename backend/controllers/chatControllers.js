@@ -3,7 +3,7 @@ const Community = require("../models/communityModel")
 const Users = require("../models/usersModel")
 
 const createCommunityChat = asyncHandler(async function(req,res){
-    if(!req.body.users || !req.body.communityName || !req.body.idea ){ 
+    if(!req.body.users || !req.body.communityName || !req.body.idea ){
                 // If the input to these fields arent given error
         return res.status(400).send({message : "Please fill important fields"})
     }
@@ -46,24 +46,4 @@ const createCommunityChat = asyncHandler(async function(req,res){
     }
 })
 
-////////////////////////////////////////////////////////
-
-// Need to test it, use authorization bearer token 
-// give needed inputs then test
-// Date : 16 mar
-// One of the user to login
-// {
-//     "userName" : "Divagar",
-//     "DOB" : "2003-03-31",
-//     "phone" : "8921545915",
-//     "email": "abhi@example.com",
-//     "password": "abhi"
-// }
-
-// Date : 16 Mar
-// Error : Error in line 21,22
-
-// Date : 19 Mar 
-// Error in 16 Mar success
-////////////////////////////////////////////////////////
 module.exports = createCommunityChat
