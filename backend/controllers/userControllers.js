@@ -69,7 +69,6 @@ const authUser = asyncHandler(async function(req,res){
 
 // /user?search = abhishek
 const allUsers = asyncHandler(async function(req,res){
-    console.log(req);
     const keyword = req.query.search ?{
         $or : [
             { userName : {$regex : req.query.search, $options : "i"}}
@@ -81,12 +80,13 @@ const allUsers = asyncHandler(async function(req,res){
 
     // let keyword = {};
     // if (req.query.search) {
-    // keyword = {
-    //     $or: [
-    //     { userName: { $regex: req.query.search, $options: "i" } }
-    //     ]
-    // };
+    //     keyword = {
+    //         $or: [
+    //         { userName: { $regex: req.query.search, $options: "i" } }
+    //         ]    
+    //     };
     // }
+    console.log(keyword);
     const users = await Users.find(keyword).find({$ne : req.user._id})
     // The above is a chained find in which first find gives data filtered
     // by keyword next filter from the first filtered data

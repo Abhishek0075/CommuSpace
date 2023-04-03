@@ -1,5 +1,4 @@
 const asyncHandler = require("express-async-handler")
-const UserCommunity = require("../models/usersInCommunity")
 const Community = require("../models/communityModel")
 const Users = require("../models/usersModel")
 
@@ -9,7 +8,7 @@ const createCommunityChat = asyncHandler(async function(req,res){
         return res.status(400).send({message : "Please fill important fields"})
     }
     if(req.body.users.length <2 ){
-        return res.status(400).send("More than 2 users are required to form a group chat")
+        return res.status(400).send("Add atleast 1 user")
     }
     let participantUsers
     try{
@@ -17,6 +16,8 @@ const createCommunityChat = asyncHandler(async function(req,res){
     }catch(e){
         console.error(e);
     }
+    console.log(req.user);
+    participantUsers.push(req.user)
     console.log("Result : ",participantUsers);
     
     try{
@@ -37,7 +38,7 @@ const createCommunityChat = asyncHandler(async function(req,res){
                 participants : addCommunity.participants
             })
         }else{
-            res.status(400)
+            res.status(400) 
             err = new Error("Failed to Create New User")
             throw err
         }
@@ -47,4 +48,51 @@ const createCommunityChat = asyncHandler(async function(req,res){
     }
 })
 
-module.exports = createCommunityChat
+const propertyChange = asyncHandler(async function(req, res){
+    const { communityId, newName, newIdea, newLogo} = req.body
+
+    const updates = {}
+    if (newName) {
+        updates.communityName = newName
+    }
+    if (newIdea) {
+        updates.idea = newIdea
+    }
+    if (newLogo) {
+        updates.communityLogo = newLogo
+    }
+
+    const updateChat = await Community.findByIdAndUpdate({_id : communityId},updates,{
+        new : true
+    })
+    if(updateChat){
+        res.json(updateChat)
+    }else{
+        res.status(400) 
+        err = new Error("Failed to Rename the Community")
+        throw err
+    }
+})
+
+const CommunitySearch = asyncHandler(async function(req,res){
+    const keyword = req.query.search ?{
+        $or : [
+            { communityName : {$regex : req.query.search, $options : "i"}}
+        ],
+    }
+    :{}
+    console.log(keyword);
+    const communities = await Community.find(keyword)
+    res.send(communities)
+})
+
+const addToGroup = asyncHandler(async function(req,res){
+    const { communityId, userId } = req.body
+
+    const added = await Community.findByIdAndUpdate({_id : communityId},{
+        
+    })
+})
+
+
+module.exports = {createCommunityChat, propertyChange, CommunitySearch}
