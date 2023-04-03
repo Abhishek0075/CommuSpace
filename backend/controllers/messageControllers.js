@@ -1,6 +1,5 @@
 const asyncHandler = require('express-async-handler')
 const Messaging = require('../models/messagingModel')
-
 const sendMessage = asyncHandler(async function(req,res){
     const { communityId, messageContent } = req.body
 
@@ -17,17 +16,14 @@ const sendMessage = asyncHandler(async function(req,res){
 
     try{
         var message = await Messaging.create(newMessage)
-        console.log("Hlo");
         message = await message.populate({
             path : "senderId",
             select : "userName profilePic"
         })
-        console.log("Hlo");
         message = await message.populate({
             path : "communityId",
-            select : "communityName communityLogo"
+            select : "communityName participants"
         })
-        console.log("Hlo");
         res.status(201).json(message)
 
         }catch(err){

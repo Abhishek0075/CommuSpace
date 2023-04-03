@@ -61,7 +61,7 @@ const propertyChange = asyncHandler(async function(req, res){
     if (newLogo) {
         updates.communityLogo = newLogo
     }
-
+    console.log(updates);
     const updateChat = await Community.findByIdAndUpdate({_id : communityId},updates,{
         new : true
     })
@@ -81,18 +81,27 @@ const CommunitySearch = asyncHandler(async function(req,res){
         ],
     }
     :{}
-    console.log(keyword);
     const communities = await Community.find(keyword)
-    res.send(communities)
+    res.status(201).json(communities)
 })
 
 const addToGroup = asyncHandler(async function(req,res){
-    const { communityId, userId } = req.body
 
-    const added = await Community.findByIdAndUpdate({_id : communityId},{
-        
-    })
+    const { communityId, userId } = req.body
+    const newUser = await Users.findById({_id : userId}).select("-password" )
+    console.log("Hlo");
+    const added = await Community.findByIdAndUpdate({_id : communityId},
+        {$push : {participants : newUser}},
+        {new : true}
+    )
+    console.log("Hlo");
+    if(added) {
+        res.status(201).json(added)
+    }else{
+        res.status(201)
+        throw new Error("Participant addition failed")
+    }
 })
 
 
-module.exports = {createCommunityChat, propertyChange, CommunitySearch}
+module.exports = {createCommunityChat, propertyChange, CommunitySearch, addToGroup}
