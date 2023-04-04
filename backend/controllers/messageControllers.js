@@ -33,4 +33,22 @@ const sendMessage = asyncHandler(async function(req,res){
 
 })
 
-module.exports = { sendMessage }
+const allMessages = asyncHandler(async function(req,res){
+    try {
+        const messages = await Messaging.find({ communityId : req.params.communityId }).populate({
+            path : "senderId",
+            select : "userName profilePic email"
+        }).populate("communityId")
+
+    if(messages){
+        res.status(201).json(messages)
+    }else{
+        throw new Error("No messages found")
+    }
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({error : error.message})
+    }
+})
+
+module.exports = { sendMessage, allMessages }

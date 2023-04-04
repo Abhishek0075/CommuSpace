@@ -24,4 +24,15 @@ app.use(errorHandler)
 
 const PORT = process.env.PORT || 3000
 
-app.listen(PORT,console.log("Server Started on PORT ",PORT));
+const server = app.listen(PORT,console.log("Server Started on PORT ",PORT));
+
+const io = require("socket.io")(server, {
+    pingTimeout : 60000,
+    cors : {
+        origin : "https://localhost:3000",
+    }
+})
+
+io.on("connection", function(socket){
+    console.log('connected to socket.io') // dont forget to install socket.io in frontend
+})                                       // npm install socket.io-client 
