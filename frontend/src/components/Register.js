@@ -11,10 +11,31 @@ export const Register = (props) =>{
 
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(email);
-    }
+      
+        try {
+          const response = await fetch('http://localhost:5000/api/users/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userName: name,
+              proPic: null,
+              phone: phone,
+              email: email,
+              DOB: date,
+              password: pass,
+            }),
+          });
+          const data = await response.json();
+          console.log(data);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      
 
     return (
     <>
@@ -33,7 +54,7 @@ export const Register = (props) =>{
             <input value={pass} onChange= {(e) => setPass(e.target.value)} type="password" placeholder="Set Password" id="password" name="password"/>
             <input value={date} onChange= {(e) => setDate(e.target.value)} type="date" placeholder="Date of Birth" id="date" name="date"/>
 
-            <button type="submit">Register</button>
+            <button onClick={handleSubmit}>Register</button>
         
              </form>
 

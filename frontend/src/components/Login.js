@@ -8,10 +8,28 @@ export const Login = (props) =>{
     const [email, setEmail] = useState('');
     const [password, setPass] = useState('');
 
-const handleSubmit = (e) => { 
-    e.preventDefault();
-    console.log(email);
-}
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        try {
+          const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          });
+    
+          if (!response.ok) {
+            throw new Error("Invalid email or password");
+          }
+    
+          const data = await response.json();
+          console.log(data);
+        } catch (error) {
+          console.error(error.message);
+        }
+    };
 
     return (
     <>
@@ -30,7 +48,7 @@ const handleSubmit = (e) => {
                             <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="phone/email" id="email" autoComplete="off" name="email"/>
                             <label htmlFor="password"></label>
                             <input value={password} onChange={(e) => setPass(e.target.value)} type="password" placeholder="************" id="password" autoComplete="off" name="password"/>
-                            <button type="submit">Login</button>
+                            <button onClick={handleSubmit}>Login</button>
                         </form>
                         <NavLink to = "/register" className="signup-image-link1">Sign up to CommuSpace </NavLink>
                         <NavLink to = "/passmail" className="signup-image-link1">Forgot Password? </NavLink>
