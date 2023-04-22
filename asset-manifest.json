@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/CommuSpace/static/css/main.24be2ac7.css",
-    "main.js": "/CommuSpace/static/js/main.a67277ba.js",
+    "main.css": "/CommuSpace/static/css/main.574beaee.css",
+    "main.js": "/CommuSpace/static/js/main.67d1ab5c.js",
     "static/js/787.fade2e9e.chunk.js": "/CommuSpace/static/js/787.fade2e9e.chunk.js",
     "static/media/1.gif": "/CommuSpace/static/media/1.8efd92f1273c58793a8e.gif",
     "static/media/39.jpg": "/CommuSpace/static/media/39.76a5e7896ba3fd79cd4b.jpg",
@@ -14,13 +14,14 @@
     "static/media/9.jpg": "/CommuSpace/static/media/9.e95dc528d030625f45f1.jpg",
     "static/media/20.png": "/CommuSpace/static/media/20.85afb122e7463097618a.png",
     "static/media/25.png": "/CommuSpace/static/media/25.ffbc5aa7e446028772cb.png",
+    "static/media/77.jpg": "/CommuSpace/static/media/77.d15be29503cca404d3e3.jpg",
     "index.html": "/CommuSpace/index.html",
-    "main.24be2ac7.css.map": "/CommuSpace/static/css/main.24be2ac7.css.map",
-    "main.a67277ba.js.map": "/CommuSpace/static/js/main.a67277ba.js.map",
+    "main.574beaee.css.map": "/CommuSpace/static/css/main.574beaee.css.map",
+    "main.67d1ab5c.js.map": "/CommuSpace/static/js/main.67d1ab5c.js.map",
     "787.fade2e9e.chunk.js.map": "/CommuSpace/static/js/787.fade2e9e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.24be2ac7.css",
-    "static/js/main.a67277ba.js"
+    "static/css/main.574beaee.css",
+    "static/js/main.67d1ab5c.js"
   ]
 }
