@@ -1,75 +1,63 @@
-import React, {useState} from "react";
-import logo from "./2.png";
-import logo1 from "./25.png"
-import { NavLink } from 'react-router-dom';
-import "../App.css";
+import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, VStack, useToast } from '@chakra-ui/react'
+import React, { useState } from 'react'
 
-export const Login = (props) =>{
-    const [email, setEmail] = useState('');
-    const [password, setPass] = useState('');
+const Login = () => {
+    
+    const [email,setEmail] = useState()
+    const [password,setPassword] = useState()
+    const [show,setShow] = useState(false)
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-    
-        try {
-          const response = await fetch("/api/auth/login", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password }),
-          });
-    
-          if (!response.ok) {
-            throw new Error("Invalid email or password");
-          }
-    
-          const data = await response.json();
-          console.log(data);
-        } catch (error) {
-          console.error(error.message);
-        }
-    };
+    const handleClick = function(){
+        setShow(!show)
+    }
 
+    const handleSubmit = function(){
+
+    }
+    
     return (
-    <>
-    <div className="Bebo">
+        <VStack spacing= "25px">
+            <FormControl id = "email" type="email" isRequired>
+                <FormLabel>Email</FormLabel>
+                <Input
+                placeholder='Enter your email'
+                onChange={function(e){
+                    setEmail(e.target.value)
+                }}
+                ></Input>
+            </FormControl>
             
-        
-        <section className="signin">
-            <div className="container mt-5">
-                <div className="signup-content">
-                    <div className="auth-form-container1">
-                        <form className="login-form" onSubmit={handleSubmit}>
-                            
-                            <h2 className="form-title">Login</h2>
-                            
-                            <label htmlFor="email"></label>
-                            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="phone/email" id="email" autoComplete="off" name="email"/>
-                            <label htmlFor="password"></label>
-                            <input value={password} onChange={(e) => setPass(e.target.value)} type="password" placeholder="************" id="password" autoComplete="off" name="password"/>
-                            <button onClick={handleSubmit}>Login</button>
-                        </form>
-                        <NavLink to = "/register" className="signup-image-link1">Sign up to CommuSpace </NavLink>
-                        <NavLink to = "/passmail" className="signup-image-link1">Forgot Password? </NavLink>
-                     </div>
+            <FormControl id = "password" type="password" isRequired>
+                    <FormLabel>
+                        Password
+                    </FormLabel>
+                    <InputGroup>
+                    <Input
+                    type = {show?"text":"password"}
+                    placeholder='Enter your password'
+                    onChange={function(e){
+                        setPassword(e.target.value)
+                    }}
+                    ></Input>
+                    <InputRightElement marginRight="20px">
+                    <Button 
+                    variant='outline' 
+                    h="1.75rem" size="m"
+                    p="5px"
+                    onClick={handleClick}colorScheme='blue'
+                    >
+                        {show?"Hide":"Show"}
+                    </Button>
+                    </InputRightElement>
+                </InputGroup>
+                
             
-                </div>
-            </div>  
-        </section>
-    </div>
-        
-    </>
-        
+            </FormControl>
+            <Button colorScheme='blue' variant='solid'type="submit" onClick={handleSubmit}>
+                Login
+            </Button>
+        </VStack>
     )
 }
 
-function CreateLoginPageWrapper() {
-    return (
-      <div className="create-login-page-wrapper">
-        <Login/>
-      </div>
-    );
-  }
-  
-  export default CreateLoginPageWrapper;
+export default Login

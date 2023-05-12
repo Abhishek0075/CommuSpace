@@ -123,4 +123,9 @@ const removeFromGroup = asyncHandler(async function(req,res){
     }
 })
 
-module.exports = {createCommunityChat, propertyChange, CommunitySearch, addToGroup, removeFromGroup}
+const showCommunity = asyncHandler(async function(req,res){
+    const communities = await Community.find()
+    res.status(201).json(communities)
+})
+
+module.exports = {createCommunityChat, propertyChange, CommunitySearch, addToGroup, removeFromGroup,showCommunity}
