@@ -2,7 +2,7 @@ import { Box, Container, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@
 import axios from 'axios'
 import React, { useEffect } from 'react'
 import Signup from '../components/Signup'
-import Login from '../components/Login'
+import Login from './Login'
 
 const HomePage = () => {
     
