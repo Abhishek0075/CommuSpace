@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler')
 const Messaging = require('../models/messagingModel')
 const sendMessage = asyncHandler(async function(req,res){
     const { communityId, messageContent } = req.body
-
+    console.log("Hlo");
     if(!messageContent || !communityId){
         console.log("Invalid Data passed into Request")
         return res.sendStatus(400)
@@ -13,7 +13,6 @@ const sendMessage = asyncHandler(async function(req,res){
         communityId : communityId,
         messageContent : messageContent
     }
-
     try{
         var message = await Messaging.create(newMessage)
         message = await message.populate({

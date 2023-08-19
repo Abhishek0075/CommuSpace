@@ -15,14 +15,13 @@ export const Register = (props) =>{
         e.preventDefault();
       
         try {
-          const response = await fetch('http://localhost:5000/api/users/register', {
+          const response = await fetch('/user/', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
               userName: name,
-              proPic: null,
               phone: phone,
               email: email,
               DOB: date,
@@ -41,7 +40,6 @@ export const Register = (props) =>{
     <>
     
         <div className="machu">
-                   
 
         <div className="auth-form-container">
             <form className="register-form" onSubmit={handleSubmit}>

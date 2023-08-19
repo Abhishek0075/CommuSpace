@@ -12,7 +12,7 @@ export const Login = (props) =>{
         e.preventDefault();
     
         try {
-          const response = await fetch("/api/auth/login", {
+          const response = await fetch("user/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -25,6 +25,7 @@ export const Login = (props) =>{
           }
     
           const data = await response.json();
+          localStorage.setItem('userInfo',JSON.stringify(data))
           console.log(data);
         } catch (error) {
           console.error(error.message);

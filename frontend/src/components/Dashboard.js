@@ -10,6 +10,8 @@ import Picker from '@emoji-mart/react';
 import { AiOutlineFileImage } from 'react-icons/ai';
 import { NavLink } from 'react-router-dom';
 
+let communityId = '64298751b1c12220de84a0a1'; // A random community ID
+let senderId = "64298329c2f2c9c843c1e844"; // A random sender ID
 const ChatScreenContainer = styled.div`
   height: 79vh;
   width: 180vh;
@@ -148,85 +150,105 @@ const EmojiPickerContainer = styled.div`
 
 
 
-
-
+const ENDPOINT = 'http://localhost:5000';
+var socket, selectedChatCompare;
 
 const Dashboard = () => {
     const [messages, setMessages] = useState([]);
-    const [messageInput, setMessageInput] = useState('');
+    const [messageContent, setMessageContent] = useState('');
     const [emoji, setEmoji] = useState(null);
     const [emojiPickerSelected, setEmojiPickerSelected] = useState('')
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const chatMessagesRef = useRef(null);
 
-        const [selectedImage, setSelectedImage] = useState(null);
-      
-        const handleMessageSubmit = (message) => {
-          const newMessage = {
-            text: message,
-            image: selectedImage,
-          };
-          setMessages([...messages, newMessage]);
-          setSelectedImage(null);
-        };
-      
-        const handleImageChange = (event) => {
-          const file = event.target.files[0];
-          const reader = new FileReader();
-      
-          reader.onloadend = () => {
-            setSelectedImage(reader.result);
-          };
-      
-          if (file) {
-            reader.readAsDataURL(file);
-          }
-        };
-      
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const handleMessageSubmit = async(message) => {
+      console.log("Hello Submit here");
+      const newMessage = {
+        text: message,
+        image: selectedImage,
+      };
+      setMessages([...messages, newMessage]);
+      setSelectedImage(null);
+
+    };
+
+    const handleImageChange = (event) => {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setSelectedImage(reader.result);
+      };
+
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    };
 
 
+  useEffect(() => {
+      // Simulate messages coming from server
+      const newMessages = [
+        { id: 1, author: 'John', text: 'Hello there!', time: new Date() },
+        { id: 2, author: 'Jane', text: 'Hey John, how are you?', time: new Date() },
+        { id: 3, author: 'John', text: 'I\'m doing great, thanks for asking!', time: new Date() },
+        
+      ];
+      setMessages(newMessages);
+    }, []);
 
-    useEffect(() => {
-        // Simulate messages coming from server
-        const newMessages = [
-          { id: 1, author: 'John', text: 'Hello there!', time: new Date() },
-          { id: 2, author: 'Jane', text: 'Hey John, how are you?', time: new Date() },
-          { id: 3, author: 'John', text: 'I\'m doing great, thanks for asking!', time: new Date() },
-          
-        ];
-        setMessages(newMessages);
-      }, []);
-
-      const handleSendMessage = (e) => {
-        e.preventDefault();
-        if (!messageInput.trim() && !selectedImage) {
-        return;
-        }
-        handleMessageSubmit(messageInput);
-        setMessageInput('');
-        setShowEmojiPicker(false);
-        };
-    
-      useEffect(() => {
+    const handleSendMessage = (e) => {
+      e.preventDefault();
+      if (!messageContent.trim() && !selectedImage) {
+      return;
+      }
+      handleMessageSubmit(messageContent);
+      setMessageContent('');
+      setShowEmojiPicker(false);
+      };
+  
+  useEffect(() => {
     // Scroll to bottom of messages when new message is added
     chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
   }, [messages]);
     
   const handleInputChange = (event) => {
-    setMessageInput(event.target.value);
+    setMessageContent(event.target.value);
   };
 
-  const handleSendButtonClick = () => {
-    if (messageInput.trim() !== '') {
+  const handleSendButtonClick = async() => {
+    try{
+      let input = { communityId, messageContent }
+      console.log(input);
+      const response = await fetch("/message", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(input),
+      });
+
+      if (!response.ok) {
+        throw new Error("Invalid email or password");
+      }
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error(error.message);
+    }
+    if (messageContent.trim() !== '') {
       const newMessage = {
         id: messages.length + 1,
         author: 'You',
-        text: messageInput,
+        text: messageContent,
         time: new Date(),
         emoji: showEmojiPicker ? emojiPickerSelected.native : null, // Add emoji property to message object
       };
       setMessages([...messages, newMessage]);
-      setMessageInput('');
+      setMessageContent('');
       setShowEmojiPicker(false); // Hide the emoji picker after sending the message
     }
   };
@@ -234,7 +256,7 @@ const Dashboard = () => {
 
   const handleEmojiClick = (emoji) => {
   setEmojiPickerSelected(emoji);
-  setMessageInput(`${messageInput}${emoji.native}`);
+  setMessageContent(`${messageContent}${emoji.native}`);
 };
 
   
@@ -355,7 +377,7 @@ const Dashboard = () => {
         <ChatInput
           type="text"
           placeholder="Type your message here..."
-          value={messageInput}
+          value={messageContent}
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
         />

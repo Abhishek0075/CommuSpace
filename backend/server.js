@@ -35,4 +35,4 @@ const io = require("socket.io")(server, {
 
 io.on("connection", function(socket){
     console.log('connected to socket.io') // dont forget to install socket.io in frontend
-})                                       // npm install socket.io-client 
+})                                       // npm install socket.io-client
