@@ -107,7 +107,6 @@ const removeFromGroup = asyncHandler(async function(req,res){
 
     const { communityId, userId } = req.body
     const removeUser = await Users.findById({_id : userId}).select("-password" )
-    console.log("Hlo");
     console.log(removeUser)
     const removed = await Community.findByIdAndUpdate({_id : communityId},
         {$pull : {participants : { $in: [removeUser] }}},
@@ -128,4 +127,16 @@ const showCommunity = asyncHandler(async function(req,res){
     res.status(201).json(communities)
 })
 
-module.exports = {createCommunityChat, propertyChange, CommunitySearch, addToGroup, removeFromGroup,showCommunity}
+const showUserCommunity = asyncHandler(async function(req, res) {
+    try {
+        const userId = req.user._id ;
+        const community = await Community.find({ participants: userId });
+        res.status(200).json(community);
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+module.exports = {createCommunityChat, propertyChange, CommunitySearch, addToGroup, removeFromGroup,showUserCommunity, showCommunity}

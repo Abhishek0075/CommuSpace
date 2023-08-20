@@ -172,7 +172,6 @@ const Dashboard = () => {
   const loggedInUserName = userInfo ? userInfo.userName : "Guest"; // If no user is logged in, show "Guest"
 
 
-
   useEffect(() => {
     socket.current = io(ENDPOINT);
     console.log("Socket connected");
@@ -194,7 +193,7 @@ const Dashboard = () => {
       });
     }
   }, []);
-  
+
 
   const handleSendMessage = () => {
     if (!messageContent.trim() && !selectedImage) {
@@ -207,7 +206,7 @@ const Dashboard = () => {
       image: selectedImage,
       time: new Date(), // Set the time property to the current time
     };
-  
+    
     console.log("Before updating state:", messages);
 
     setMessages(prevMessages => [...prevMessages, newMessage]);
@@ -242,50 +241,119 @@ const Dashboard = () => {
     
     
   // Define an array of communities
-  const communities = [
-    {
-      id: 1,
-      name: 'COMMUNITY 1',
-      icon: 'https://picsum.photos/id/64/4326/2884',
-      color: 'red',
-    },
-    {
-      id: 2,
-      name: 'COMMUNITY 2',
-      icon: 'https://picsum.photos/id/289/2800/1508',
-      color: 'yellow',
 
-    },
-    {
-      id: 3,
-      name: 'COMMUNITY 3',
-      icon: 'https://picsum.photos/id/16/2500/1667',
-      color: 'green',
 
-    },
-
-    {
-        id: 4,
-        name: 'COMMUNITY 4',
-        icon: 'https://picsum.photos/id/64/4326/2884',
-        color: 'red',
-      },
-      {
-        id: 5,
-        name: 'COMMUNITY 5',
-        icon: 'https://picsum.photos/id/289/2800/1508',
-        color: 'yellow',
+  const getUserCommunities = async function() {
+    try {
+      const response = await fetch("/community/myCommunities", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + userInfo.token // Send the token in the header of the request
+        },
+      });
   
-      },
-      {
-        id: 6,
-        name: 'COMMUNITY 6',
-        icon: 'https://picsum.photos/id/16/2500/1667',
-        color: 'green',
-  
-      },
-  ];
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        return data; // Return the data from the API call
+      } else {
+        console.error("Error fetching user communities");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
+  // const showCom = async function() {
+  //   try {
+  //     const response = await fetch("/community/cu", {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       console.log(data)
+  //       return data; // Return the data from the API call
+  //     } else {
+  //       console.error("Error fetching user communities");
+  //     }
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+  // }
+  
+  const [communities, setCommunities] = useState([]);
+
+  // useEffect(() => {
+  //   getUserCommunities()
+  //     .then(data => {
+  //       setCommunities(data);
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+  // }, []);
+
+  useEffect(() => {
+    getUserCommunities()
+      .then(data => {
+        setCommunities(data)
+        console.log("datatype of data : ",typeof data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+
+  // const communities = [
+  //   {
+  //     id: 1,
+  //     name: 'COMMUNITY 1',
+  //     icon: 'https://picsum.photos/id/64/4326/2884',
+  //     color: 'red',
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'COMMUNITY 2',
+  //     icon: 'https://picsum.photos/id/289/2800/1508',
+  //     color: 'yellow',
+
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'COMMUNITY 3',
+  //     icon: 'https://picsum.photos/id/16/2500/1667',
+  //     color: 'green',
+
+  //   },
+
+  //   {
+  //       id: 4,
+  //       name: 'COMMUNITY 4',
+  //       icon: 'https://picsum.photos/id/64/4326/2884',
+  //       color: 'red',
+  //     },
+  //     {
+  //       id: 5,
+  //       name: 'COMMUNITY 5',
+  //       icon: 'https://picsum.photos/id/289/2800/1508',
+  //       color: 'yellow',
+  
+  //     },
+  //     {
+  //       id: 6,
+  //       name: 'COMMUNITY 6',
+  //       icon: 'https://picsum.photos/id/16/2500/1667',
+  //       color: 'green',
+        
+  //     },
+  //   ];
+
+    
   return (
     <div className="dashboard-container">
       <div className="left-menu">
@@ -294,10 +362,10 @@ const Dashboard = () => {
           <NavLink to = "/createcommunityminipage" className="signup-image-link3">CREATE COMMUNITY </NavLink>
         </div>
         <div className="community-list">
-          {communities.map((community) => (
-            <div key={community.id} className="community-item">
-              <img src={community.icon} alt={community.name} />
-              <span>{community.name}</span>
+          {Object.values(communities).map((community) => ( 
+            <div key={community._id} className="community-item">
+              <img src={community.communityLogo} alt={community.communityName} />
+              <span>{community.communityName}</span>
             </div>
           ))}
         </div>
@@ -384,6 +452,5 @@ const Dashboard = () => {
 
 
 );
-};
-
+  }
 export default Dashboard;
