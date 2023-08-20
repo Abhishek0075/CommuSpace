@@ -3,9 +3,11 @@ const Users = require("../models/usersModel");
 const generateToken = require("../config/generateToken");
 
 const registerUser = asyncHandler(async function(req,res) {
-    const {userName,proPic,phone,email,DOB,password} = req.body // initializing the req.body values
-                                                            // to the array of variables
-
+    console.log("YOu are at backend")
+    const {userName,proPic,phone,email,DOB,password} = (req.body) // initializing the req.body values
+    const values = req.body                                  // to the array of variables
+    console.log(values)
+    console.log("hi");
     if(!userName || !phone || !email || !DOB || !password){
         res.status(400)
         throw new Error("Please enter all the Feilds")
@@ -38,6 +40,7 @@ const registerUser = asyncHandler(async function(req,res) {
             password : user.password,
             token : generateToken(user._id),
         })
+
     }else{
         res.status(400)
         throw new Error("Failed to Create New User")
