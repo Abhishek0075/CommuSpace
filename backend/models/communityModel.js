@@ -11,13 +11,21 @@ const communityModel = mongoose.Schema(
             type : String,
             trim : true 
         },
-        
+        creator : {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : "Users"
+        },
 
         idea : {
             type : String,
             trim : true
         },
-       
+        participants : [
+            {
+                type : mongoose.Schema.Types.ObjectId,
+                ref : "Users"
+            },
+            ],
     }, 
     {
         timestamps : true

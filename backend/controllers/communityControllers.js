@@ -7,14 +7,33 @@ const createCommunityChat = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Please fill important fields" });
   }
 
+  let participantUsers
+  try{
+      participantUsers = await Users.find({_id: {$in: req.body.users}},{password : 0})
+  }catch(e){
+      console.error(e);
+  }
+  console.log(req.user);
+  participantUsers.push(req.user)
+  console.log("Result : ",participantUsers);
+
   try {
     const addCommunity = await Community.create({
       communityName: req.body.communityName,
+      creator :  req.user._id,
       idea: req.body.idea,
+      participants : participantUsers
     });
 
     if (addCommunity) {
-      res.status(201).json({ message: "Community created", community: addCommunity });
+      res.status(201).json({ 
+        
+        _id : addCommunity._id,
+        communityName : addCommunity.communityName,
+        creator :  addCommunity.creator,
+        idea : addCommunity.idea,
+        participants : addCommunity.participants
+        });
     } else {
       res.status(400).json({ message: "Failed to create the community" });
     }
