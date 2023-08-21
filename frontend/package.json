@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "http://Abhishek0075.github.io/CommuSpace",
-  "proxy": "http://localhost:5000",
+  "proxy": "https://commuspace-5xfj.onrender.com",
   "dependencies": {
     "@emoji-mart/data": "^1.1.2",
     "@emoji-mart/react": "^1.1.1",

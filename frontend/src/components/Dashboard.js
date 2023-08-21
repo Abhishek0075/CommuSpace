@@ -117,7 +117,7 @@ const EmojiPickerContainer = styled.div`
 
 
 
-const ENDPOINT = 'http://localhost:5000';
+const ENDPOINT = 'https://commuspace-5xfj.onrender.com';
 
 const Dashboard = () => {
   const [messages, setMessages] = useState([]);
@@ -139,13 +139,13 @@ const Dashboard = () => {
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const loggedInUserName = userInfo ? userInfo.userName : "Guest"; // If no user is logged in, show "Guest"
   const [selectedCommunity, setSelectedCommunity] = useState(null); // Add this state
-  const SelectedCommunityComponent = ({ community }) => {
-    // Add the content specific to the selected community here
-  };
-
+  
   
   const [selectedCommunityIndex, setSelectedCommunityIndex] = useState(null);
-
+  
+  const SelectedCommunityComponent = ({ community }) => {
+    
+  };
 
   const saveMessageToDatabase = async function(newMessage) {
     try {
@@ -272,7 +272,7 @@ const Dashboard = () => {
 
   const getUserCommunities = async function() {
     try {
-      const response = await fetch("/community/cu", {
+      const response = await fetch("/community/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -292,7 +292,7 @@ const Dashboard = () => {
     }
   }
 
- 
+
   const [communities, setCommunities] = useState([]);
 
   useEffect(() => {
@@ -313,7 +313,6 @@ const Dashboard = () => {
 }, [selectedCommunity]);
 
 
- 
     
   return (
     <div className="dashboard-container">

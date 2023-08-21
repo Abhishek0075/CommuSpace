@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // Define the base URL of your backend server
-const BASE_URL = 'http://localhost:5000'; // Replace with your actual backend URL
+const BASE_URL = 'https://commuspace-5xfj.onrender.com'; // Replace with your actual backend URL
 
 export const getUserCommunities = async () => {
   try {
