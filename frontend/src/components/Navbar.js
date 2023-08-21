@@ -8,6 +8,12 @@ import img from "./20.png";
 
 
 const Navbar = () => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+    const handleLogout = () => {
+        localStorage.removeItem("userInfo");
+        window.location.href = "/"; // Redirect to home page
+    };
     return (
         <>
             <nav className="main-nav">
@@ -33,15 +39,25 @@ const Navbar = () => {
                         <li>
                             <NavLink to="/about">About</NavLink>
                         </li>
-                        <li>
-                            <NavLink to="/dashboard">Dashboard</NavLink>
-                        </li>
+                        {userInfo ? (
+              <>
+                <li>
+                  <NavLink to="/dashboard">Dashboard</NavLink>
+                </li>
+                <li>
+                  <button onClick={handleLogout}>Logout</button>
+                </li>
+              </>
+            ) : (
+              <>
                         <li>
                             <NavLink to="/login">Signin</NavLink>
                         </li>
                         <li>
                             <NavLink to="/register">Signup</NavLink>
                         </li>
+                        </>
+            )}
                     </ul>
                 </div>
             </nav>

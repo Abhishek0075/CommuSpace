@@ -76,7 +76,7 @@ export const Login = (props) => {
             <div className="signup-content">
               <div className="auth-form-container1">
                 <form className="login-form" onSubmit={handleSubmit}>
-                  <h2 className="form-title">Login</h2>
+                  <h2 className="form-title">Welcome Back!</h2>
                   <label htmlFor="email"></label>
                   <input
                     value={email}
@@ -100,7 +100,7 @@ export const Login = (props) => {
                   <button type="submit">Login</button>
                 </form>
                 <NavLink to="/register" className="signup-image-link1">
-                  Create Account
+                  New to CommuSpace? Register
                 </NavLink>
                 <NavLink to="/passmail" className="signup-image-link1">
                   Forgot Password?

@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import PopupMessage from './PopupMessage'; // Update the path to the PopupMessage component
 import "./community.css";
+import "./popup.css"; // Add this line to import the new CSS file
 import axios from 'axios';
+
+
 
 function Createcommunityminipage() {
   const [communityName, setCommunityName] = useState('');
   const [idea, setIdea] = useState('');
-  const [userInfo, setUserInfo] = useState(null); // State to hold user information
+  const [userInfo, setUserInfo] = useState(null); 
+  const [showPopup, setShowPopup] = useState(false); // State to control the popup
+  const [userCreatedCommunities, setUserCreatedCommunities] = useState([]);
+// State to hold user information
 
   useEffect(() => {
     // Fetch user information from local storage
@@ -39,6 +46,8 @@ function Createcommunityminipage() {
       });
 
       console.log('Community created:', response.data);
+      setUserCreatedCommunities([...userCreatedCommunities, response.data]); // Update the state with the new community
+      setShowPopup(true); // Show the popup
       // Redirect or update UI as needed
     } catch (error) {
       console.error('Error creating community:', error);
@@ -73,7 +82,14 @@ function Createcommunityminipage() {
           <button type="submit" className="btn btn-primary">Create Community</button>
         </form>
       </div>
-    </div>
+      {showPopup && (
+        <PopupMessage
+        message="Community created successfully"
+        communityName={communityName} // Pass the communityName to the PopupMessage component
+        redirectTo="/dashboard" // Update the path as needed
+      />
+    )}
+  </div>
   );
 }
 

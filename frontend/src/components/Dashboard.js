@@ -5,37 +5,19 @@ import { FaPlus, FaCog } from 'react-icons/fa';
 import { ImFilePicture } from 'react-icons/im';
 import { Gi3DGlasses } from "react-icons/gi";
 import './dashboard.css';
-import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
-import { AiOutlineFileImage } from 'react-icons/ai';
 import { NavLink } from 'react-router-dom';
 import io from 'socket.io-client'; // Import socket.io-client
 
-let communityId = '64298751b1c12220de84a0a1'; // A random community ID
-let senderId = "64298329c2f2c9c843c1e844"; // A random sender ID
 const ChatScreenContainer = styled.div`
   height: 79vh;
   width: 180vh;
   display: flex;
   flex-direction: column;
   background-color: #434448;
-  padding: 20px;
-  
-  
+  padding: 20px;  
 `;
 
-const ChatHeader = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const ChatTitle = styled.h1`
-  color: #fff;
-  font-size: 24px;
-  font-weight: 500;
-  margin: 0;
-`;
 
 const ChatMessages = styled.div`
   flex: 1;
@@ -51,13 +33,6 @@ const ChatMessage = styled.div`
   align-items: ${props => props.isCurrentUser ? "flex-end" : "flex-start"};
 `;
 
-const Avatar = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #7289da;
-  margin-right: 16px;
-`;
 
 const MessageContent = styled.div`
   display: flex;
@@ -76,12 +51,11 @@ const MessageHeader = styled.div`
 `;
 
 const AuthorName = styled.span`
-  color: ${props => props.isCurrentUser ? "#fff" : "#000"};
+  color: ${props => props.isCurrentUser ? "" : "#000"};
   font-size: 12.6px;
   font-weight: 550;
   margin-right: 8px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-
 `;
 
 const MessageTime = styled.span`
@@ -115,14 +89,6 @@ const ChatInput = styled.input`
   &:focus {
     outline: none;
   }
-`;
-
-const ChatMessageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  border-radius: 4px;
-  margin-bottom: 16px;
 `;
 
 const SendButton = styled.button`
@@ -159,6 +125,8 @@ const Dashboard = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const socket = useRef(null);
   const chatMessagesRef = useRef(null);
+  const [communityMessages, setCommunityMessages] = useState({}); // State to store messages for each community
+
   const handleInputChange = (event) => {
     setMessageContent(event.target.value);
   };
@@ -170,8 +138,65 @@ const Dashboard = () => {
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
   const loggedInUserName = userInfo ? userInfo.userName : "Guest"; // If no user is logged in, show "Guest"
+  const [selectedCommunity, setSelectedCommunity] = useState(null); // Add this state
+  const SelectedCommunityComponent = ({ community }) => {
+    // Add the content specific to the selected community here
+  };
 
+  
+  
 
+  const saveMessageToDatabase = async function(newMessage) {
+    try {
+      const response = await fetch(`/message/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + userInfo.token,
+        },
+        body: JSON.stringify({
+          communityId: newMessage.communityId,
+          messageContent: newMessage.text,
+        }),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Message saved:", data);
+      } else {
+        console.error("Error saving message to database");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  
+  
+  const fetchMessagesForCommunity = async function(communityId) {
+    try {
+      const response = await fetch(`/messages/${communityId}`, { // Use the appropriate endpoint for retrieving messages
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + userInfo.token,
+        },
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Messages for community:", data);
+        return data;
+      } else {
+        console.error("Error fetching messages for community");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  
+  
   useEffect(() => {
     socket.current = io(ENDPOINT);
     console.log("Socket connected");
@@ -201,10 +226,12 @@ const Dashboard = () => {
     }
   
     const newMessage = {
-      author: 'You',
+      author: loggedInUserName,
       text: messageContent,
       image: selectedImage,
-      time: new Date(), // Set the time property to the current time
+      time: new Date(),
+      communityId: selectedCommunity._id // Add the communityId to the new message
+      // Set the time property to the current time
     };
     
     console.log("Before updating state:", messages);
@@ -216,6 +243,8 @@ const Dashboard = () => {
     if (socket.current) {
       socket.current.emit('message', newMessage);
     }
+
+    saveMessageToDatabase(newMessage);
   
     setMessageContent('');
     setSelectedImage(null);
@@ -229,10 +258,6 @@ const Dashboard = () => {
 };
 
   
-  
-
-
-
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       handleSendMessage();
@@ -245,7 +270,7 @@ const Dashboard = () => {
 
   const getUserCommunities = async function() {
     try {
-      const response = await fetch("/community/myCommunities", {
+      const response = await fetch("/community/cu", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -265,38 +290,8 @@ const Dashboard = () => {
     }
   }
 
-  // const showCom = async function() {
-  //   try {
-  //     const response = await fetch("/community/cu", {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       console.log(data)
-  //       return data; // Return the data from the API call
-  //     } else {
-  //       console.error("Error fetching user communities");
-  //     }
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // }
-  
+ 
   const [communities, setCommunities] = useState([]);
-
-  // useEffect(() => {
-  //   getUserCommunities()
-  //     .then(data => {
-  //       setCommunities(data);
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //     });
-  // }, []);
 
   useEffect(() => {
     getUserCommunities()
@@ -309,50 +304,14 @@ const Dashboard = () => {
       });
   }, []);
 
-  // const communities = [
-  //   {
-  //     id: 1,
-  //     name: 'COMMUNITY 1',
-  //     icon: 'https://picsum.photos/id/64/4326/2884',
-  //     color: 'red',
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'COMMUNITY 2',
-  //     icon: 'https://picsum.photos/id/289/2800/1508',
-  //     color: 'yellow',
+  useEffect(() => {
+  if (selectedCommunity) {
+    fetchMessagesForCommunity(selectedCommunity._id);
+  }
+}, [selectedCommunity]);
 
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'COMMUNITY 3',
-  //     icon: 'https://picsum.photos/id/16/2500/1667',
-  //     color: 'green',
 
-  //   },
-
-  //   {
-  //       id: 4,
-  //       name: 'COMMUNITY 4',
-  //       icon: 'https://picsum.photos/id/64/4326/2884',
-  //       color: 'red',
-  //     },
-  //     {
-  //       id: 5,
-  //       name: 'COMMUNITY 5',
-  //       icon: 'https://picsum.photos/id/289/2800/1508',
-  //       color: 'yellow',
-  
-  //     },
-  //     {
-  //       id: 6,
-  //       name: 'COMMUNITY 6',
-  //       icon: 'https://picsum.photos/id/16/2500/1667',
-  //       color: 'green',
-        
-  //     },
-  //   ];
-
+ 
     
   return (
     <div className="dashboard-container">
@@ -363,7 +322,13 @@ const Dashboard = () => {
         </div>
         <div className="community-list">
           {Object.values(communities).map((community) => ( 
-            <div key={community._id} className="community-item">
+            <div key={community._id} className="community-item"
+            onClick={() => {
+              setSelectedCommunity(community);
+              fetchMessagesForCommunity(community._id); // Fetch messages when a community is selected
+            }}
+          >
+          
               <img src={community.communityLogo} alt={community.communityName} />
               <span>{community.communityName}</span>
             </div>
@@ -393,9 +358,10 @@ const Dashboard = () => {
           >
             <MessageContent isCurrentUser={message.author === 'You'}>
               <MessageHeader>
-                <AuthorName isCurrentUser={message.author === 'You'}>
-                  {message.author}
-                </AuthorName>
+              <AuthorName isCurrentUser={message.author === 'You' || message.author === loggedInUserName}>
+  {message.author}
+</AuthorName>
+
                 <MessageTime>
                   {message.time.toLocaleTimeString()}
                 </MessageTime>
@@ -414,6 +380,11 @@ const Dashboard = () => {
           })}
         <div ref={chatMessagesRef}></div>
       </ChatMessages>
+      {selectedCommunity ? (
+  <SelectedCommunityComponent community={selectedCommunity} />
+) : (
+  <div className="default-message">Select a community to view content.</div>
+)}
       <ChatInputContainer>
         <ChatInput
           type="text"
