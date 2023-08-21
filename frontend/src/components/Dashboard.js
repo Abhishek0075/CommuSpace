@@ -144,7 +144,8 @@ const Dashboard = () => {
   };
 
   
-  
+  const [selectedCommunityIndex, setSelectedCommunityIndex] = useState(null);
+
 
   const saveMessageToDatabase = async function(newMessage) {
     try {
@@ -181,6 +182,7 @@ const Dashboard = () => {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + userInfo.token,
         },
+        
       });
   
       if (response.ok) {
@@ -321,19 +323,22 @@ const Dashboard = () => {
           <NavLink to = "/createcommunityminipage" className="signup-image-link3">CREATE COMMUNITY </NavLink>
         </div>
         <div className="community-list">
-          {Object.values(communities).map((community) => ( 
-            <div key={community._id} className="community-item"
-            onClick={() => {
-              setSelectedCommunity(community);
-              fetchMessagesForCommunity(community._id); // Fetch messages when a community is selected
-            }}
-          >
-          
-              <img src={community.communityLogo} alt={community.communityName} />
-              <span>{community.communityName}</span>
-            </div>
-          ))}
-        </div>
+  {Object.values(communities).map((community, index) => ( 
+    <div
+      key={community._id}
+      className={`community-item ${selectedCommunityIndex === index ? "active" : ""}`}
+      onClick={() => {
+        setSelectedCommunityIndex(index); // Update the selected community index
+        setSelectedCommunity(community);
+        fetchMessagesForCommunity(community._id); // Fetch messages when a community is selected
+      }}
+    >
+      <img src={community.communityLogo} alt={community.communityName} />
+      <span>{community.communityName}</span>
+    </div>
+  ))}
+</div>
+
         <form className="user-form">
           <div className="username-settings">
             <Gi3DGlasses style={{ color: 'white', fontSize: '24px', backgroundColor: 'b71c83' }}/>

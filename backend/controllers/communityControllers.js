@@ -145,4 +145,4 @@ const showUserCommunity = asyncHandler(async function(req, res) {
         res.status(500).json({ error: error.message });
     }
 });
-module.exports = {createCommunityChat, propertyChange, CommunitySearch, addToGroup, removeFromGroup,showUserCommunity, showCommunity, getUserCommunities}
+module.exports = {createCommunityChat, propertyChange, CommunitySearch, addToGroup, removeFromGroup,showUserCommunity, showCommunity,}
