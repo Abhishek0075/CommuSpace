@@ -40,7 +40,6 @@ const registerUser = asyncHandler(async function(req,res) {
             password : user.password,
             token : generateToken(user._id),
         })
-
     }else{
         res.status(400)
         throw new Error("Failed to Create New User")

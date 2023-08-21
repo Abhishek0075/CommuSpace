@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Community = require("../models/communityModel");
 const Users = require("../models/usersModel");
+const { remove } = require("lodash");
 
 const createCommunityChat = asyncHandler(async (req, res) => {
   if (!req.body.communityName || !req.body.idea) {
@@ -81,6 +82,7 @@ const CommunitySearch = asyncHandler(async function(req,res){
     res.status(200).json(communities)
 })
 
+
 const addToGroup = asyncHandler(async function(req,res){
 
     const { communityId, userId } = req.body
@@ -103,6 +105,7 @@ const removeFromGroup = asyncHandler(async function(req,res){
 
     const { communityId, userId } = req.body
     const removeUser = await Users.findById({_id : userId}).select("-password" )
+    console.log("Hlo");
     console.log(removeUser)
     const removed = await Community.findByIdAndUpdate({_id : communityId},
         {$pull : {participants : { $in: [removeUser] }}},
@@ -123,6 +126,7 @@ const showCommunity = asyncHandler(async function(req,res){
     res.status(201).json(communities)
 })
 
+
 const showUserCommunity = asyncHandler(async function(req, res) {
     try {
         const userId = req.user._id ;
@@ -135,4 +139,5 @@ const showUserCommunity = asyncHandler(async function(req, res) {
 });
 
 
-module.exports = {createCommunityChat, propertyChange, CommunitySearch, addToGroup, removeFromGroup,showUserCommunity, showCommunity}
+
+module.exports = {createCommunityChat, propertyChange, CommunitySearch, addToGroup, removeFromGroup,showUserCommunity, showCommunity,}

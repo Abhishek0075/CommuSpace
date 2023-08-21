@@ -17,6 +17,8 @@ import Settings from "./components/Settings";
 
 
 export const App = () => {
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
   return (
     <>
       <Navbar/>

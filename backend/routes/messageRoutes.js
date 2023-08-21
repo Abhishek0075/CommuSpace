@@ -6,6 +6,6 @@ const router = express.Router()
 
 router.route('/').post(protect, sendMessage)
 router.route('/remove').get(remover)
-router.route('/:communityId').get(protect ,allMessages)  
+router.route('/:communityId').get(protect ,allMessages) 
 
 module.exports = router
