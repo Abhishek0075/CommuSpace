@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Community = require("../models/communityModel");
 const Users = require("../models/usersModel");
+const { remove } = require("lodash");
 
 const createCommunityChat = asyncHandler(async (req, res) => {
   if (!req.body.communityName || !req.body.idea) {
@@ -81,6 +82,7 @@ const CommunitySearch = asyncHandler(async function(req,res){
     res.status(200).json(communities)
 })
 
+
 const addToGroup = asyncHandler(async function(req,res){
 
     const { communityId, userId } = req.body
@@ -124,16 +126,6 @@ const showCommunity = asyncHandler(async function(req,res){
     res.status(201).json(communities)
 })
 
-const getUserCommunities = async () => {
-    try {
-      const response = await axios.get('/community/user'); // Adjust the API endpoint
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
-  
-  
 
 const showUserCommunity = asyncHandler(async function(req, res) {
     try {
@@ -145,4 +137,7 @@ const showUserCommunity = asyncHandler(async function(req, res) {
         res.status(500).json({ error: error.message });
     }
 });
+
+
+
 module.exports = {createCommunityChat, propertyChange, CommunitySearch, addToGroup, removeFromGroup,showUserCommunity, showCommunity,}
